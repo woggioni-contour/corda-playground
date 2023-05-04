@@ -1,0 +1,7 @@
+plugins {
+    id 'net.corda.plugins.cordapp'
+}
+
+dependencies {
+    cordaCompile cordaModule('corda-core')
+}

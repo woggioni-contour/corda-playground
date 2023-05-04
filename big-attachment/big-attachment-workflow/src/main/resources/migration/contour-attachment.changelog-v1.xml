@@ -1,0 +1,52 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+    <changeSet author="Contour" id="contour-attachment">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="contour_attachment"/>
+            </not>
+        </preConditions>
+        <createTable tableName="contour_attachment">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="contour_attachment_pkey"/>
+            </column>
+            <column name="hash_algorithm" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hash_bytes" type="BINARY(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="filename" type="NVARCHAR(255)"/>
+            <column name="complete" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="contour_attachment_hash_idx" tableName="contour_attachment">
+            <column name="hash_algorithm"/>
+            <column name="hash_bytes"/>
+        </createIndex>
+    </changeSet>
+    <changeSet author="Contour" id="contour-attachment-chunk">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="contour_attachment_chunk"/>
+            </not>
+        </preConditions>
+        <createTable tableName="contour_attachment_chunk">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="contour_attachment_chunk_pkey"/>
+            </column>
+            <column name="data" type="BLOB">
+                <constraints nullable="false"/>
+            </column>
+            <column name="attachment_id" type="INT">
+                <constraints nullable="false"
+                             referencedTableName="contour_attachment"
+                             referencedColumnNames="id"
+                             foreignKeyName="contour_attachment.id"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

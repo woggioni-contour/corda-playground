@@ -1,0 +1,50 @@
+pluginManagement {
+    repositories {
+        mavenLocal {
+            content {
+                includeGroup 'network.contour.gradle'
+            }
+        }
+        maven {
+            url (System.getenv('AZURE_ARTIFACTORY_URL') ?: getProperty('azure.artifactory.url'))
+            name 'maven-private'
+            authentication {
+                basic(BasicAuthentication)
+            }
+
+            credentials {
+                username (System.getenv('AZURE_ARTIFACTORY_USER') ?: getProperty('azure.artifactory.user'))
+                password (System.getenv('AZURE_ARTIFACTORY_PASSWORD') ?: getProperty('azure.artifactory.password'))
+            }
+
+            content {
+                includeModule 'network.contour.gradle', 'common-build'
+                includeGroup 'network.contour.gradle.common.build'
+            }
+        }
+        maven {
+            url = getProperty('r3.artifactory.url') + "/corda-releases"
+            content {
+                includeGroup 'net.corda'
+                includeGroup 'net.corda.plugins.cordapp'
+                includeGroup 'net.corda.plugins.cordformation'
+                includeGroup 'net.corda.plugins.quasar-utils'
+            }
+        }
+        gradlePluginPortal()
+        mavenCentral()
+    }
+    plugins {
+        id 'org.jetbrains.kotlin.jvm' version getProperty('kotlin.version')
+        id 'org.jetbrains.kotlin.plugin.noarg' version getProperty('kotlin.version')
+        id 'org.jetbrains.kotlin.plugin.allopen' version getProperty('kotlin.version')
+        id 'net.corda.plugins.cordapp' version getProperty('corda.gradle.plugin.version')
+        id 'net.corda.plugins.cordformation' version getProperty('corda.gradle.plugin.version')
+        id 'net.corda.plugins.quasar-utils' version getProperty('corda.gradle.plugin.version')
+        id 'network.contour.gradle.common.build' version getProperty('network.contour.gradle.common.build.version')
+    }
+}
+rootProject.name = 'corda-playground'
+
+include 'serialization'
+include 'serialization:person-factory-service'

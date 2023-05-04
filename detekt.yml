@@ -1,0 +1,256 @@
+build:
+  weights:
+    complexity: 2
+    formatting: 1
+    LongParameterList: 1
+    comments: 1
+
+processors:
+  active: true
+  exclude:
+  # - 'FunctionCountProcessor'
+  # - 'PropertyCountProcessor'
+  # - 'ClassCountProcessor'
+  # - 'PackageCountProcessor'
+  # - 'KtFileCountProcessor'
+
+console-reports:
+  active: true
+  exclude:
+  #  - 'ProjectStatisticsReport'
+  #  - 'ComplexityReport'
+  #  - 'NotificationReport'
+    - 'FindingsReport'
+    - 'BuildFailureReport'
+
+potential-bugs:
+  active: true
+  IteratorNotThrowingNoSuchElementException:
+    active: true
+  DuplicateCaseInWhenExpression:
+    active: true
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: true
+  EqualsWithHashCodeExist:
+    active: true
+  WrongEqualsTypeParameter:
+    active: true
+  ExplicitGarbageCollectionCall:
+    active: true
+  UnreachableCode:
+    active: true
+  LateinitUsage:
+    active: false
+  UnsafeCallOnNullableType:
+    active: true
+  UnsafeCast:
+    active: true
+  UselessPostfixExpression:
+    active: true
+  InvalidRange:
+    active: true
+  IteratorHasNextCallsNextMethod:
+    active: true
+  MissingWhenCase:
+    active: true
+  UnconditionalJumpStatementInLoop:
+    active: true
+
+performance:
+  active: true
+  ForEachOnRange:
+    active: false
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
+
+exceptions:
+  active: true
+  ExceptionRaisedInUnexpectedLocation:
+    active: false
+    methodNames: 'toString,hashCode,equals,finalize'
+  SwallowedException:
+    active: true
+  TooGenericExceptionCaught:
+    active: false
+    exceptionNames:
+      - ArrayIndexOutOfBoundsException
+      - Error
+      - Exception
+      - IllegalMonitorStateException
+      - IndexOutOfBoundsException
+      - InterruptedException
+      - NullPointerException
+      - RuntimeException
+  TooGenericExceptionThrown:
+    active: true
+    exceptionNames:
+      - Throwable
+      - ThrowError
+      - ThrowException
+      - ThrowNullPointerException
+      - ThrowRuntimeException
+      - ThrowThrowable
+  InstanceOfCheckForException:
+    active: true
+  PrintStackTrace:
+    active: true
+  RethrowCaughtException:
+    active: true
+  ReturnFromFinally:
+    active: true
+  ThrowingExceptionFromFinally:
+    active: true
+  ThrowingExceptionInMain:
+    active: false
+  ThrowingNewInstanceOfSameException:
+    active: true
+
+empty-blocks:
+  active: true
+  EmptyCatchBlock:
+    active: true
+  EmptyClassBlock:
+    active: false
+  EmptyDefaultConstructor:
+    active: true
+  EmptyDoWhileBlock:
+    active: true
+  EmptyElseBlock:
+    active: false
+  EmptyFinallyBlock:
+    active: true
+  EmptyForBlock:
+    active: true
+  EmptyFunctionBlock:
+    active: false
+  EmptyIfBlock:
+    active: true
+  EmptyInitBlock:
+    active: true
+  EmptySecondaryConstructor:
+    active: true
+  EmptyWhenBlock:
+    active: true
+  EmptyWhileBlock:
+    active: true
+
+complexity:
+  active: true
+  LongMethod:
+    threshold: 20
+  LongParameterList:
+    functionThreshold: 5
+  LargeClass:
+    threshold: 150
+  ComplexMethod:
+    threshold: 10
+  TooManyFunctions:
+    thresholdInFiles: 10
+    thresholdInClasses: 20
+  ComplexCondition:
+    threshold: 3
+  LabeledExpression:
+    active: false
+  StringLiteralDuplication:
+    active: false
+    threshold: 2
+    ignoreAnnotation: true
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
+
+style:
+  active: false
+  ReturnCount:
+    active: false
+  NewLineAtEndOfFile:
+    active: false
+  OptionalAbstractKeyword:
+    active: true
+  OptionalWhenBraces:
+    active: true
+  EqualsNullCall:
+    active: false
+  ForbiddenComment:
+    active: true
+    values: 'FIXME:,STOPSHIP:'
+  ForbiddenImport:
+    active: false
+    imports: ''
+  ModifierOrder:
+    active: false
+  MagicNumber:
+    active: true
+    ignoreNumbers: '-1,0,1,2'
+    ignoreHashCodeFunction: false
+    ignorePropertyDeclaration: false
+    ignoreAnnotation: false
+  WildcardImport:
+    active: true
+  SafeCast:
+    active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 200
+    excludePackageStatements: false
+    excludeImportStatements: false
+  ProtectedMemberInFinalClass:
+    active: false
+  UnnecessaryParentheses:
+    active: false
+  DataClassContainsFunctions:
+    active: false
+  UseDataClass:
+    active: false
+  UnnecessaryAbstractClass:
+    active: false
+  ForbiddenVoid:
+    active: true
+  PreferToOverPairSyntax:
+    active: false
+
+comments:
+  active: true
+  CommentOverPrivateFunction:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
+    active: false
+
+naming:
+  active: false
+  ClassNaming:
+    active: true
+    classPattern: '[A-Z$][a-zA-Z$]*'
+  EnumNaming:
+    active: true
+    enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
+  FunctionNaming:
+    active: false
+    functionPattern: '^[a-z$][a-zA-Z$0-9]*$'
+  VariableNaming:
+    active: true
+    variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
+  ForbiddenClassName:
+    active: false
+    forbiddenName: ''
+  FunctionMaxLength:
+    active: false
+    maximumFunctionNameLength: 30
+  FunctionMinLength:
+    active: false
+    minimumFunctionNameLength: 3
+  VariableMaxLength:
+    active: false
+    maximumVariableNameLength: 30
+  VariableMinLength:
+    active: false
+    minimumVariableNameLength: 3

@@ -1,0 +1,108 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' apply false
+    id 'org.jetbrains.kotlin.plugin.noarg' apply false
+    id 'org.jetbrains.kotlin.plugin.allopen' apply false
+    id 'net.corda.plugins.cordapp' apply false
+    id 'net.corda.plugins.cordformation' apply false
+    id 'net.corda.plugins.quasar-utils' apply false
+    id 'network.contour.gradle.common.build' apply false
+}
+
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.internal.HasConvention
+
+ext {
+    corda_release_version = getProperty('corda.version')
+}
+
+subprojects { subproject ->
+    apply plugin: 'org.jetbrains.kotlin.jvm'
+    apply plugin: 'org.jetbrains.kotlin.plugin.noarg'
+    apply plugin: 'org.jetbrains.kotlin.plugin.allopen'
+    apply plugin: 'network.contour.gradle.common.build'
+
+    version getProperty('playground.version')
+
+    group 'network.contour.corda.playground'
+
+    repositories {
+        maven {
+            url = project.resolveProperty('azure.artifactory.url', "https://pkgs.dev.azure.com/ContourNetwork/Contour/_packaging/maven-private/maven/v1")
+            name = project.resolveProperty('azure.artifactory.name', 'maven-private')
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = project.resolveProperty('azure.artifactory.user', null)
+                password = project.resolveProperty('azure.artifactory.password', null)
+            }
+            content {
+                includeModule 'network.contour', 'contour-detekt-rules'
+            }
+        }
+        maven {
+            url = getProperty('r3.artifactory.url') + "/corda-releases"
+            content {
+                includeGroup 'net.corda'
+            }
+        }
+        maven {
+            url = getProperty('r3.artifactory.url') + "/corda-dependencies"
+            content {
+                includeGroup 'co.paralleluniverse'
+                includeGroup 'net.corda.djvm'
+                includeGroup 'com.palominolabs.metrics'
+                includeGroup 'org.crashub'
+            }
+        }
+        maven {
+            url = getProperty('r3.artifactory.url') + "/corda-dependencies"
+            content {
+                includeGroup 'com.github.bft-smart'
+            }
+            metadataSources {
+                artifact()
+            }
+        }
+        mavenCentral()
+    }
+
+    subproject.dependencies.ext.cordaModule = { String name, String version = project.getProperty('corda.version') ->
+        try {
+            [group: 'net.corda', name: name, version: version]
+        } catch (MissingPropertyException mpe) {
+            throw new GradleException("Project property 'corda.version' is not set")
+        }
+    }
+
+    pluginManager.withPlugin('org.jetbrains.kotlin.jvm') {
+        tasks.withType(KotlinCompile.class).configureEach {
+            kotlinOptions {
+                languageVersion = 1.2
+                apiVersion = 1.2
+                jvmTarget = JavaVersion.VERSION_1_8
+                javaParameters = true
+            }
+        }
+    }
+
+    pluginManager.withPlugin('java-library') {
+        dependencies {
+            testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: getProperty('junit.version')
+            testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: getProperty('junit.version')
+            testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: getProperty('junit.version')
+        }
+
+        test {
+            useJUnitPlatform()
+        }
+
+        configurations.all { cfg ->
+            if (!(cfg.name in (['kotlinCompilerClasspath', 'kotlinCompilerPluginClasspath'] as Set<String>))) {
+                ['kotlin-stdlib-common', 'kotlin-stdlib', 'kotlin-stdlib-jdk8', 'kotlin-stdlib-jdk7', 'kotlin-reflect', 'kotlin-test', 'kotlin-test-common'].each { mavenName ->
+                    force group: 'org.jetbrains.kotlin', name: mavenName, version: getProperty('kotlin.stdlib.version')
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_ERR">
+            <PatternLayout pattern="%d{HH:mm:ss,SSS} %highlight{[%p]} (%t) %c: %m%n"/>
+            <Filters>
+                <ThresholdFilter level="ALL" onMatch="ACCEPT" />
+            </Filters>
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Root level="ALL">
+            <AppenderRef ref="Console"/>
+        </Root>
+        <Logger name="org.apache.activemq.artemis" level="INFO"/>
+        <Logger name="net.corda.serialization" level="INFO"/>
+        <Logger name="io.netty" level="INFO"/>
+        <Logger name="org.apache.commons.beanutils" level="WARN"/>
+        <Logger name="net.corda.client.rpc" level="INFO"/>
+    </Loggers>
+</Configuration>

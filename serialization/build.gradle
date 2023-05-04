@@ -1,0 +1,40 @@
+
+sourceSets {
+    serializeCode
+    deserializeCode
+}
+
+dependencies {
+    implementation project('person-factory-service')
+    serializeCodeImplementation project('person-factory-service')
+    deserializeCodeImplementation project('person-factory-service')
+
+    serializeCodeImplementation cordaModule('corda-serialization')
+    deserializeCodeImplementation cordaModule('corda-serialization')
+
+    implementation cordaModule('corda-core')
+    implementation cordaModule('corda-serialization')
+}
+
+String serializedDataFile = new File(project.buildDir, 'data.bin').toString()
+
+Provider<JavaExec> serializeTask = tasks.register('serialize', JavaExec) {
+    mainClass = 'network.contour.serialization.playground.MainKt'
+    args = ["serialize"]
+    systemProperty('serialized.data.file', serializedDataFile)
+    classpath = sourceSets.main.output +
+            configurations.runtimeClasspath +
+            sourceSets.serializeCode.runtimeClasspath +
+            sourceSets.serializeCode.output
+}
+
+tasks.register('deserialize', JavaExec) {
+    inputs.files(serializeTask)
+    args = ["deserialize"]
+    mainClass = 'network.contour.serialization.playground.MainKt'
+    systemProperty('serialized.data.file', serializedDataFile)
+    classpath = sourceSets.main.output +
+            configurations.runtimeClasspath +
+            sourceSets.deserializeCode.runtimeClasspath +
+            sourceSets.deserializeCode.output
+}

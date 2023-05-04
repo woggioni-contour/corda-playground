@@ -1,0 +1,19 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation cordaModule('corda-rpc')
+    implementation project(':big-attachment:big-attachment-workflow')
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: getProperty('log4j.version')
+    implementation group: 'org.slf4j', name: 'slf4j-api', version: getProperty('slf4j.version')
+
+}
+
+
+tasks.register('run', JavaExec) {
+    classpath = configurations.getByName(JavaPlugin.RUNTIME_CLASSPATH_CONFIGURATION_NAME) +
+            tasks.getByName(JavaPlugin.JAR_TASK_NAME).outputs.files
+    main = 'network.contour.corda.playground.big.attachment.rpc.client.Main'
+    systemProperty('log4j2.configurationFile', 'network/contour/corda/playground/big/attachment/rpc/client/log4j2.xml')
+}

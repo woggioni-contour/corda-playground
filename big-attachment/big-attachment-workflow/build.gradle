@@ -1,0 +1,10 @@
+plugins {
+    id 'net.corda.plugins.cordapp'
+    id 'net.corda.plugins.quasar-utils'
+}
+
+dependencies {
+    cordaCompile cordaModule('corda-node-api')
+    cordaCompile cordaModule('corda-jackson')
+    cordaCompile cordaModule('corda-node')
+}
